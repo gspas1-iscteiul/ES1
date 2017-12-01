@@ -8,12 +8,12 @@ import org.uma.jmetal.solution.DoubleSolution;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
-	  public AntiSpamFilterProblem() {
-	    // 10 variables (anti-spam filter rules) by default 
+	public AntiSpamFilterProblem() {
+		// 10 variables (anti-spam filter rules) by default 
 	    this(10);
-	  }
+	}
 
-	  public AntiSpamFilterProblem(Integer numberOfVariables) {
+	public AntiSpamFilterProblem(Integer numberOfVariables) {
 	    setNumberOfVariables(numberOfVariables);
 	    setNumberOfObjectives(2);
 	    setName("AntiSpamFilterProblem");
@@ -28,9 +28,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	    setLowerLimit(lowerLimit);
 	    setUpperLimit(upperLimit);
-	  }
+	}
 
-	  public void evaluate(DoubleSolution solution){
+	public void evaluate(DoubleSolution solution){
 	    double aux, xi, xj;
 	    double[] fx = new double[getNumberOfObjectives()];
 	    double[] x = new double[getNumberOfVariables()];
@@ -50,5 +50,5 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	    solution.setObjective(0, fx[0]);
 	    solution.setObjective(1, fx[1]);
-	  }
-	}
+	 }
+}

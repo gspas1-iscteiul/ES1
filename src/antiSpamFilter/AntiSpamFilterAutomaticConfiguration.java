@@ -71,5 +71,5 @@ public class AntiSpamFilterAutomaticConfiguration {
    
     return algorithms;
   }
-
+  
 }
