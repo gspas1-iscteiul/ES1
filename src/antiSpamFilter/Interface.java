@@ -4,20 +4,29 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 
 public class Interface {
 
 	private JFrame frame;
 	private JPanel globalPanel;
-	private JPanel panel1;
-	private JPanel panel2;
-	private JPanel panel3;
+	private JPanel panelCima;
+	private JPanel panelCentro;
+	private JPanel panelBaixo;
+	private LeitorDeRegras leitor;
+	private LinkedList<Regra> regras;
+	private JTextField fieldRules;
+	private JTextField fieldSpam ;
+	private JTextField fieldHam;
 
 	public Interface() {
 		frame = new JFrame();
@@ -33,167 +42,176 @@ public class Interface {
 		globalPanel.setLayout(new BorderLayout());
 		frame.add(globalPanel);
 		
-		construirPainelCima(globalPanel);
-		construirPainelCentro(globalPanel);
-		construirPainelBaixo(globalPanel);
+		construirPainelCima();
+		construirPainelCentro();
+		construirPainelBaixo();
 	}
 	
-	private void construirPainelCima(JPanel globalPanel2) {
-		panel1 = new JPanel();
+	private void construirPainelCima() {
+		panelCima = new JPanel();
 		
-		globalPanel.add(panel1,BorderLayout.NORTH);		
-		panel1.setLayout(new GridLayout(5,2));
+		globalPanel.add(panelCima,BorderLayout.NORTH);		
+		panelCima.setLayout(new GridLayout(5,2));
 
 		JLabel label1 = new JLabel(" Caminho para os ficheiros de configuração:");
-		panel1.add(label1);
+		panelCima.add(label1);
 		
-		JLabel label2 = new JLabel("");
-		panel1.add(label2);
+		JLabel labelEspaço1 = new JLabel("");
+		panelCima.add(labelEspaço1);
 		
-		JTextField field1 = new JTextField(); //tem de se ler o caminho inserido aqui
-		panel1.add(field1);
+		fieldRules = new JTextField();
+		panelCima.add(fieldRules);
 		
-		JLabel label3 = new JLabel(" rules.cf");
-		panel1.add(label3);
+		JLabel labelRules = new JLabel(" rules.cf");
+		panelCima.add(labelRules);
 		
-		JTextField field2 = new JTextField(); //tem de se ler o caminho inserido aqui
-		panel1.add(field2);
+		fieldSpam = new JTextField(); //tem de se ler o caminho inserido aqui
+		panelCima.add(fieldSpam);
 		
-		JLabel label4 = new JLabel(" spam.log");
-		panel1.add(label4);
+		JLabel labelSpam = new JLabel(" spam.log");
+		panelCima.add(labelSpam);
 		
-		JTextField field3 = new JTextField(); //tem de se ler o caminho inserido aqui
-		panel1.add(field3);
+		fieldHam = new JTextField(); //tem de se ler o caminho inserido aqui
+		panelCima.add(fieldHam);
 		
-		JLabel label5 = new JLabel(" ham.log");
-		panel1.add(label5);
+		JLabel labelHam = new JLabel(" ham.log");
+		panelCima.add(labelHam);
 	}
 	
-	private void construirPainelCentro(JPanel globalPanel2) {
-		panel2 = new JPanel();
+	private void construirPainelCentro() {
+		panelCentro = new JPanel();
 		
-		globalPanel.add(panel2,BorderLayout.CENTER);		
-		panel2.setLayout(new GridLayout(11,2));
+		globalPanel.add(panelCentro,BorderLayout.CENTER);		
+		panelCentro.setLayout(new GridLayout(8,2));
 		
-		JLabel label1 = new JLabel(" Configuração Manual");
-		JLabel label2 = new JLabel("");
-		JLabel labeltemporaria = new JLabel(" Colocar tabela de regras e pesos");
-		JLabel label3 = new JLabel("");
-		JLabel label4 = new JLabel(" FP:");
-		JLabel label5 = new JLabel("");
-		JTextField field1 = new JTextField();
-		JLabel label6 = new JLabel("");
-		JLabel label7 = new JLabel(" FN:");
-		JLabel label8 = new JLabel("");
-		JTextField field2 = new JTextField();
-		JLabel label9 = new JLabel("");
-		JLabel label10 = new JLabel("");
-		JLabel label11 = new JLabel("");
+		JLabel label1 = new JLabel(" Afinação Manual");
+		panelCentro.add(label1);
 		
-		panel2.add(label1);
-		panel2.add(label2);
-		panel2.add(labeltemporaria);
-		panel2.add(label3);
-		panel2.add(label4);
-		panel2.add(label5);
-		panel2.add(field1);
-		panel2.add(label6);
-		panel2.add(label7);
-		panel2.add(label8);
-		panel2.add(field2);
-		panel2.add(label9);
-		panel2.add(label10);
-		panel2.add(label11);
-		
-		JButton button1 = new JButton("Gerar Configuração");
-		button1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		
-		JLabel label12 = new JLabel("");
-		
-		JButton button2 = new JButton("Avaliar Configuração");
-		button2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		
-		JLabel label13 = new JLabel("");
-		
-		JButton button3 = new JButton("Gravar Configuração");
-		button3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		
-		panel2.add(button1);
-		panel2.add(label12);
-		panel2.add(button2);
-		panel2.add(label13);
-		panel2.add(button3);
-	}
-	
-	private void construirPainelBaixo(JPanel globalPanel2) {
-		panel3 = new JPanel();
-		
-		globalPanel.add(panel3,BorderLayout.SOUTH);		
-		panel3.setLayout(new GridLayout(9,2));
-		
-		JLabel label1 = new JLabel(" Configuração Automática");
-		JLabel label2 = new JLabel("");
-		JLabel labeltemporaria = new JLabel(" Colocar tabela de regras e pesos");
-		JLabel label3 = new JLabel("");
-		JLabel label4 = new JLabel(" FP:");
-		JLabel label5 = new JLabel("");
-		JTextField field1 = new JTextField();
-		JLabel label6 = new JLabel("");
-		JLabel label7 = new JLabel(" FN:");
-		JLabel label8 = new JLabel("");
-		JTextField field2 = new JTextField();
-		JLabel label9 = new JLabel("");
-		JLabel label10 = new JLabel("");
-		JLabel label11 = new JLabel("");
+		JLabel labelEspaço1 = new JLabel("");
+		panelCentro.add(labelEspaço1);
 
-		panel3.add(label1);
-		panel3.add(label2);
-		panel3.add(labeltemporaria);
-		panel3.add(label3);
-		panel3.add(label4);
-		panel3.add(label5);
-		panel3.add(field1);
-		panel3.add(label6);
-		panel3.add(label7);
-		panel3.add(label8);
-		panel3.add(field2);
-		panel3.add(label9);
-		panel3.add(label10);
-		panel3.add(label11);
+		DefaultTableModel model = new DefaultTableModel(2,2); //tamanho apenas temporário
+		String[] colNames = {"Regras","Pesos"};
+		model.setColumnIdentifiers(colNames);
+
+		JTable table = new JTable(model);
 		
-		JButton button1 = new JButton("Gerar Configuração Automática Ótima");
-		button1.addActionListener(new ActionListener() {
+		JScrollPane scrollArea = new JScrollPane(table);
+		panelCentro.add(scrollArea);
+				
+		JLabel labelEspaço2 = new JLabel("");
+		JLabel labelFP = new JLabel(" FP:");
+		JLabel labelFN = new JLabel(" FN:");
+		JTextField fieldFP = new JTextField();
+		JTextField fieldFN = new JTextField();
+		JLabel labelEspaço3 = new JLabel("");
+		JLabel labelEspaço4 = new JLabel("");
+		
+		panelCentro.add(labelEspaço2);
+		panelCentro.add(labelFP);
+		panelCentro.add(labelFN);
+		panelCentro.add(fieldFP);
+		panelCentro.add(fieldFN);
+		panelCentro.add(labelEspaço3);
+		panelCentro.add(labelEspaço4);
+		
+		JButton buttonGerarConfiguração = new JButton("Ler regras");
+		buttonGerarConfiguração.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nome = fieldRules.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\rules.cf
+				
+				leitor = new LeitorDeRegras();
+				leitor.lerFicheiro(nome);
+				
+				regras = leitor.getRegras();
+				
+				model.setNumRows(regras.size());
+				
+				for (int i = 0; i < regras.size(); i++) {
+					table.setValueAt(regras.get(i).getNome(), i, 0);
+				}				
+			}
+		});
+				
+		JButton buttonAvaliarConfiguração = new JButton("Avaliar Configuração");
+		buttonAvaliarConfiguração.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+				
+		JButton buttonGravarConfiguração = new JButton("Gravar Configuração");
+		buttonGravarConfiguração.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
 		
-		JButton button2 = new JButton("Gravar Configuração");
-		button2.addActionListener(new ActionListener() {
+		panelCentro.add(buttonGerarConfiguração);
+		panelCentro.add(buttonAvaliarConfiguração);
+		panelCentro.add(buttonGravarConfiguração);
+	}
+	
+	private void construirPainelBaixo() {
+		panelBaixo = new JPanel();
+		
+		globalPanel.add(panelBaixo,BorderLayout.SOUTH);		
+		panelBaixo.setLayout(new GridLayout(8,2));
+		
+		JLabel label1 = new JLabel(" Afinação Automática");
+		panelBaixo.add(label1);
+
+		JLabel labelEspaço1 = new JLabel("");
+		panelBaixo.add(labelEspaço1);
+		
+//		DefaultTableModel model = new DefaultTableModel(2,2); // alterar o tamanho da tabela
+//		String[] colNames = {"Regras","Pesos"};
+//		model.setColumnIdentifiers(colNames);
+//		
+//		JTable table = new JTable(model);
+//		
+//		JScrollPane scrollArea= new JScrollPane(table);
+//		panelBaixo.add(scrollArea);
+		
+		JLabel labeltemporaria = new JLabel(" Colocar tabela de regras e pesos");
+		JLabel labelEspaço2 = new JLabel("");
+		JLabel labelFP = new JLabel(" FP:");
+		JLabel labelFN = new JLabel(" FN:");
+		JTextField fieldFP = new JTextField();
+		JTextField fieldFN = new JTextField();
+		JLabel labelEspaço3 = new JLabel("");
+		JLabel labelEspaço4 = new JLabel("");
+
+		panelBaixo.add(labeltemporaria);
+		panelBaixo.add(labelEspaço2);
+		panelBaixo.add(labelFP);
+		panelBaixo.add(labelFN);
+		panelBaixo.add(fieldFP);
+		panelBaixo.add(fieldFN);
+		panelBaixo.add(labelEspaço3);
+		panelBaixo.add(labelEspaço4);
+		
+		JButton buttonGerarConfiguraçãoAutomática = new JButton("Gerar Configuração Automática Ótima");
+		buttonGerarConfiguraçãoAutomática.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		JButton buttonGravarConfiguração = new JButton("Gravar Configuração");
+		buttonGravarConfiguração.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
 				
-		panel3.add(button1);
-		panel3.add(button2);
+		panelBaixo.add(buttonGerarConfiguraçãoAutomática);
+		panelBaixo.add(buttonGravarConfiguração);
 	}
 
 	public void open() {
 		frame.setVisible(true);
-		frame.setSize(550,700);
+		frame.setSize(550,670);
 	}
 
 	public static void main(String[] args) {
