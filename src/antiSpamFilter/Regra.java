@@ -4,8 +4,8 @@ public class Regra {
 	
 	private String nome;
 
-	public Regra(String linha) {
-		this.setNome(linha);
+	public Regra(String nome) {
+		this.setNome(nome);
 	}
 
 	public String getNome() {
