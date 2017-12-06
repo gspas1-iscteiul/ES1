@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +24,6 @@ public class FiltroManual {
 	private JPanel globalPanel;
 	private JPanel panelCima;
 	private JPanel panelCentro;
-	private JPanel panelBaixo;
 	private LeitorDeRegras leitorRegras;
 	private LeitorDeMensagensERegras leitorMensagensSpam;
 	private LeitorDeMensagensERegras leitorMensagensHam;
@@ -47,8 +49,8 @@ public class FiltroManual {
 		frame.add(globalPanel);
 		
 		construirEAtuarSobrePainelCima();
-		construirEAtuarSobrePainelCentro();
-		construirEAtuarSobrePainelBaixo();
+		construirEAtuarSobrePainelCentroEBaixo();
+//		construirEAtuarSobrePainelBaixo();
 	}
 	
 	private void construirEAtuarSobrePainelCima() {
@@ -82,12 +84,17 @@ public class FiltroManual {
 		panelCima.add(labelHam);
 	}
 	
-	private void construirEAtuarSobrePainelCentro() {
+	private void construirEAtuarSobrePainelCentroEBaixo() {
 		panelCentro = new JPanel();
 		
 		globalPanel.add(panelCentro,BorderLayout.CENTER);		
-		panelCentro.setLayout(new GridLayout(8,2));
+		panelCentro.setLayout(new GridLayout(15,2));
 		
+		afinacaoManual();
+		afinacaoAutomatica();
+	}
+
+	private void afinacaoManual() {
 		JLabel label1 = new JLabel(" Afinação Manual");
 		panelCentro.add(label1);
 		
@@ -121,7 +128,7 @@ public class FiltroManual {
 		
 		construirEAtuarSobreBotaoObterRegras(table, model);
 		construirEAtuarSobreBotaoAvaliarConfiguracao(table, fieldFN, fieldFP);
-		construirEAtuarSobreBotaoGravarConfiguracao();
+		construirEAtuarSobreBotaoGravarConfiguracao(table);
 	}
 
 	private void construirEAtuarSobreBotaoObterRegras(JTable table, DefaultTableModel model) {
@@ -177,11 +184,22 @@ public class FiltroManual {
 		panelCentro.add(buttonAvaliarConfiguração);
 	}
 
-	private void construirEAtuarSobreBotaoGravarConfiguracao() {
+	private void construirEAtuarSobreBotaoGravarConfiguracao(JTable table) {
 		JButton buttonGravarConfiguração = new JButton("Gravar Configuração");
 		buttonGravarConfiguração.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+			    try {
+			    BufferedWriter buffWrite = new BufferedWriter(new FileWriter("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//rules.cf"));
+			    for (int i = 0; i < regras.size(); i++) {
+			        buffWrite.append(regras.get(i).getNome() + " ");
+					double d = Double.valueOf(table.getValueAt(i,1).toString());
+					buffWrite.append(d + "\n");
+				}
+			    buffWrite.close();
+			    System.out.println("Configuração manual gravada com sucesso");
+			    } catch(IOException e1) {
+			    	e1.printStackTrace();
+			    }				
 			}
 		});
 	
@@ -234,36 +252,44 @@ public class FiltroManual {
 		fieldFP.setText("" + numeroFP);
 	}
 	
-	
-	private void construirEAtuarSobrePainelBaixo() {
-		panelBaixo = new JPanel();
-		
-		globalPanel.add(panelBaixo,BorderLayout.SOUTH);		
-		panelBaixo.setLayout(new GridLayout(9,2));
+	private void afinacaoAutomatica() {
+		JLabel labelEspaço1 = new JLabel("");
+		panelCentro.add(labelEspaço1);
+		JLabel labelEspaço2 = new JLabel("");
+		panelCentro.add(labelEspaço2);
+		JLabel labelEspaço3 = new JLabel("");
+		panelCentro.add(labelEspaço3);
 		
 		JLabel label1 = new JLabel(" Afinação Automática");
-		panelBaixo.add(label1);
+		panelCentro.add(label1);
 
-		JLabel labelEspaço1 = new JLabel("");
-		panelBaixo.add(labelEspaço1);
-			
-		JLabel labeltemporaria = new JLabel(" Colocar tabela de regras e pesos");
-		JLabel labelEspaço2 = new JLabel("");
-		JLabel labelFP = new JLabel(" FP:");
-		JLabel labelFN = new JLabel(" FN:");
-		JTextField fieldFP = new JTextField();
-		JTextField fieldFN = new JTextField();
-		JLabel labelEspaço3 = new JLabel("");
 		JLabel labelEspaço4 = new JLabel("");
+		panelCentro.add(labelEspaço4);
+				
+		DefaultTableModel model2 = new DefaultTableModel(2,2); //tamanho apenas temporário, alterado mais abaixo
+		String[] colNames = {"Regras","Pesos"};
+		model2.setColumnIdentifiers(colNames);
 
-		panelBaixo.add(labeltemporaria);
-		panelBaixo.add(labelEspaço2);
-		panelBaixo.add(labelFP);
-		panelBaixo.add(labelFN);
-		panelBaixo.add(fieldFP);
-		panelBaixo.add(fieldFN);
-		panelBaixo.add(labelEspaço3);
-		panelBaixo.add(labelEspaço4);
+		JTable table2 = new JTable(model2);
+		
+		JScrollPane scrollArea2 = new JScrollPane(table2);
+		panelCentro.add(scrollArea2);
+
+		JLabel labelEspaço6 = new JLabel("");
+		JLabel labelFPAuto = new JLabel(" FP:");
+		JLabel labelFNAuto = new JLabel(" FN:");
+		JTextField fieldFPAuto = new JTextField();
+		JTextField fieldFNAuto = new JTextField();
+		JLabel labelEspaço7 = new JLabel("");
+		JLabel labelEspaço8 = new JLabel("");
+
+		panelCentro.add(labelEspaço6);
+		panelCentro.add(labelFPAuto);
+		panelCentro.add(labelFNAuto);
+		panelCentro.add(fieldFPAuto);
+		panelCentro.add(fieldFNAuto);
+		panelCentro.add(labelEspaço7);
+		panelCentro.add(labelEspaço8);
 		
 		JButton buttonGerarConfiguraçãoAutomática = new JButton("Gerar Configuração Automática Ótima");
 		buttonGerarConfiguraçãoAutomática.addActionListener(new ActionListener() {
@@ -272,20 +298,20 @@ public class FiltroManual {
 			}
 		});
 		
-		JButton buttonGravarConfiguração = new JButton("Gravar Configuração");
-		buttonGravarConfiguração.addActionListener(new ActionListener() {
+		JButton buttonGravarConfiguraçãoAutomática = new JButton("Gravar Configuração Automática");
+		buttonGravarConfiguraçãoAutomática.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
 				
-		panelBaixo.add(buttonGerarConfiguraçãoAutomática);
-		panelBaixo.add(buttonGravarConfiguração);
+		panelCentro.add(buttonGerarConfiguraçãoAutomática);
+		panelCentro.add(buttonGravarConfiguraçãoAutomática);		
 	}
 	
 	public void open() {
 		frame.setVisible(true);
-		frame.setSize(550,670);
+		frame.setSize(700,980);
 	}
 
 	public static void main(String[] args) {
