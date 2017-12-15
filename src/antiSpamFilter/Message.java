@@ -31,5 +31,4 @@ public class Message {
 	public void setRules(LinkedList<Rule> rules) {
 		this.rules = rules;
 	}
-	
 }

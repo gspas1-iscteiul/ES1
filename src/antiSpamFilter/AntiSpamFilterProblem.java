@@ -1,21 +1,22 @@
 package antiSpamFilter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
+	private static final long serialVersionUID = 1L;
+
 	public AntiSpamFilterProblem() {
-		// 10 variables (anti-spam filter rules) by default 
-	    this(10);
+	    this(335);
 	}
 
 	public AntiSpamFilterProblem(Integer numberOfVariables) {
-	    setNumberOfVariables(numberOfVariables);
-	    setNumberOfObjectives(2);
+	    setNumberOfVariables(numberOfVariables); //numberOfVariables=335
+	    setNumberOfObjectives(2); // FP e FN
 	    setName("AntiSpamFilterProblem");
 
 	    List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables()) ;
@@ -31,24 +32,72 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	}
 
 	public void evaluate(DoubleSolution solution){
-	    double aux, xi, xj;
-	    double[] fx = new double[getNumberOfObjectives()];
-	    double[] x = new double[getNumberOfVariables()];
+	    double[] falsosPositivosEFalsosNegativos = new double[getNumberOfObjectives()];
+	    double[] pesos = new double[getNumberOfVariables()];
 	    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-	      x[i] = solution.getVariableValue(i) ;
+	    	pesos[i] = solution.getVariableValue(i);
 	    }
 
-	    fx[0] = 0.0;
-	    for (int var = 0; var < solution.getNumberOfVariables() - 1; var++) {
-		  fx[0] += Math.abs(x[0]); // Example for testing
-	    }
+	    RulesReader ruleReader = new RulesReader();
+		ruleReader.readFileRules("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//AntiSpamConfigurationForProfessionalMailbox//rules.cf");
+		
+		LinkedList<Rule> rules = ruleReader.getRules();
+		
+		MessagesAndRulesReader spamMessagesReader = new MessagesAndRulesReader();
+		
+	    //cálculo FN
+	    spamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//spam.log");
+		
+		LinkedList<Message> spamMessages = spamMessagesReader.getMessages();
 	    
-	    fx[1] = 0.0;
-	    for (int var = 0; var < solution.getNumberOfVariables(); var++) {
-	    	fx[1] += Math.abs(x[1]); // Example for testing
-	    }
+	    double sumRulesWeight = 0;
+	    falsosPositivosEFalsosNegativos[0] = 0.0; //FP
+	    
+		for (int i = 0; i < spamMessages.size(); i++) {
+			LinkedList<Rule> messageRules = spamMessages.get(i).getRules();
+			sumRulesWeight = 0;
+			for (int j = 0; j < messageRules.size(); j++) {
+				String s = messageRules.get(j).getName(); //da-me a regra j da mensagem i do ficheiro Spam
 
-	    solution.setObjective(0, fx[0]);
-	    solution.setObjective(1, fx[1]);
+				for (int k = 0; k < rules.size(); k++) {
+					if(rules.get(k).getName().equals(s)) {						
+						sumRulesWeight = sumRulesWeight + pesos[k];
+					}
+				}
+			}
+			if (sumRulesWeight < 5) {
+				falsosPositivosEFalsosNegativos[0] += 1;
+			}
+		}
+
+	    solution.setObjective(0, falsosPositivosEFalsosNegativos[0]);
+	    System.out.println(falsosPositivosEFalsosNegativos[0]);
+	    
+	    //cálculo FP
+	    spamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//ham.log");
+		
+		LinkedList<Message> hamMessages = spamMessagesReader.getMessages();
+	    
+	    double sumRulesWeight1 = 0;
+	    falsosPositivosEFalsosNegativos[1] = 0.0; //FN
+	    
+		for (int i = 0; i < hamMessages.size(); i++) {
+			LinkedList<Rule> messageRules = hamMessages.get(i).getRules();
+			sumRulesWeight1 = 0;
+			for (int j = 0; j < messageRules.size(); j++) {
+				String s = messageRules.get(j).getName(); //da-me a regra j da mensagem i do ficheiro Spam
+
+				for (int k = 0; k < rules.size(); k++) {
+					if(rules.get(k).getName().equals(s)) {						
+						sumRulesWeight1 = sumRulesWeight1 + pesos[k];
+					}
+				}
+			}
+			if (sumRulesWeight1 > 5) {
+				falsosPositivosEFalsosNegativos[1] += 1;
+			}
+		}
+	    
+	    solution.setObjective(1, falsosPositivosEFalsosNegativos[1]);
 	 }
 }
