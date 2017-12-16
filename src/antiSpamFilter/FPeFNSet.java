@@ -1,5 +1,9 @@
 package antiSpamFilter;
 
+/**
+ * @author gspas1-iscteiul
+ *
+ */
 public class FPeFNSet {
 
 	private double FN;

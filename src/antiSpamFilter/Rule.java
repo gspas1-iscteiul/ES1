@@ -1,7 +1,7 @@
 package antiSpamFilter;
 
 /**
- * @author guilhermepereira
+ * @author gspas1-iscteiul
  *
  */
 public class Rule {

@@ -71,7 +71,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		}
 
 	    solution.setObjective(0, falsosPositivosEFalsosNegativos[0]);
-	    System.out.println(falsosPositivosEFalsosNegativos[0]);
 	    
 	    //cálculo FP
 	    spamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//ham.log");

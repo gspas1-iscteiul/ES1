@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
- * @author guilhermepereira
+ * @author gspas1-iscteiul
  *
  */
 public class RulesReader {

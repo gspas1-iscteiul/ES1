@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * @author gspas1-iscteiul
+ *
+ */
 public class WeightsAutomaticConfigurationReader {
 
 	private LinkedList<WeightsSet> weightsSets = new LinkedList<>();
