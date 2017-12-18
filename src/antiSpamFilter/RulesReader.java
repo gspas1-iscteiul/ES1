@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 /**
  * @author gspas1-iscteiul
- *
  */
 public class RulesReader {
 

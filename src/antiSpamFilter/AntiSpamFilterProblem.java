@@ -6,9 +6,18 @@ import java.util.List;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
+/**
+ * @author adrianolopes ou vitorbastofernandes1
+ * 
+ * Changes made by gspas1-iscteiul
+ * 
+ */
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	private static final long serialVersionUID = 1L;
+	private LinkedList<Rule> rules;
+	private LinkedList<Message> spamMessages;
+	private LinkedList<Message> hamMessages;
 
 	public AntiSpamFilterProblem() {
 	    this(335);
@@ -29,29 +38,34 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	    setLowerLimit(lowerLimit);
 	    setUpperLimit(upperLimit);
+	    
+	    RulesReader ruleReader = new RulesReader();
+		ruleReader.readFileRules("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//AntiSpamConfigurationForProfessionalMailbox//rules.cf");
+		
+		rules = new LinkedList<>();
+		rules = ruleReader.getRules();
+		
+		MessagesAndRulesReader spamMessagesReader = new MessagesAndRulesReader();
+	    spamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//spam.log");
+		
+		spamMessages = spamMessagesReader.getMessages();
+		
+		MessagesAndRulesReader hamMessagesReader = new MessagesAndRulesReader();
+	    hamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//ham.log");
+		
+		hamMessages = hamMessagesReader.getMessages();
 	}
-
+	
 	public void evaluate(DoubleSolution solution){
 	    double[] falsosPositivosEFalsosNegativos = new double[getNumberOfObjectives()];
 	    double[] pesos = new double[getNumberOfVariables()];
 	    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
 	    	pesos[i] = solution.getVariableValue(i);
 	    }
-
-	    RulesReader ruleReader = new RulesReader();
-		ruleReader.readFileRules("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//AntiSpamConfigurationForProfessionalMailbox//rules.cf");
-		
-		LinkedList<Rule> rules = ruleReader.getRules();
-		
-		MessagesAndRulesReader spamMessagesReader = new MessagesAndRulesReader();
-		
-	    //cálculo FN
-	    spamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//spam.log");
-		
-		LinkedList<Message> spamMessages = spamMessagesReader.getMessages();
-	    
-	    double sumRulesWeight = 0;
-	    falsosPositivosEFalsosNegativos[0] = 0.0; //FP
+	    		
+		//cálculo FN
+		double sumRulesWeight = 0;
+	    falsosPositivosEFalsosNegativos[0] = 0.0;
 	    
 		for (int i = 0; i < spamMessages.size(); i++) {
 			LinkedList<Rule> messageRules = spamMessages.get(i).getRules();
@@ -70,15 +84,11 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			}
 		}
 
-	    solution.setObjective(0, falsosPositivosEFalsosNegativos[0]);
+		solution.setObjective(0, falsosPositivosEFalsosNegativos[0]);
 	    
 	    //cálculo FP
-	    spamMessagesReader.readFileSpamAndHam("C://Users//Guilherme Pereira//git//ES1-2017-IC1-67//ham.log");
-		
-		LinkedList<Message> hamMessages = spamMessagesReader.getMessages();
-	    
-	    double sumRulesWeight1 = 0;
-	    falsosPositivosEFalsosNegativos[1] = 0.0; //FN
+		double sumRulesWeight1 = 0;
+	    falsosPositivosEFalsosNegativos[1] = 0.0;
 	    
 		for (int i = 0; i < hamMessages.size(); i++) {
 			LinkedList<Rule> messageRules = hamMessages.get(i).getRules();
@@ -96,7 +106,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 				falsosPositivosEFalsosNegativos[1] += 1;
 			}
 		}
-	    
-	    solution.setObjective(1, falsosPositivosEFalsosNegativos[1]);
+
+		solution.setObjective(1, falsosPositivosEFalsosNegativos[1]);
 	 }
 }

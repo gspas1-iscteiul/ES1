@@ -14,8 +14,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * @author gspas1-iscteiul
+ */
 public class ManualConfiguration {
 	
+	//falta meter javadocs aqui?
 	private JPanel centralPanel;
 	private RulesReader ruleReader;
 	private MessagesAndRulesReader spamMessagesReader;
@@ -27,6 +31,7 @@ public class ManualConfiguration {
 	private JTextField fieldSpam ;
 	private JTextField fieldHam;
 
+	//falta meter javadocs aqui?
 	public ManualConfiguration(JPanel centralPanel, JTextField fieldRules, JTextField fieldSpam, JTextField fieldHam) {
 		this.centralPanel = centralPanel;
 		this.fieldRules = fieldRules;
@@ -37,7 +42,7 @@ public class ManualConfiguration {
 	/**
 	 * This operation constructs the part of the central panel 
 	 * related to the Manual Configuration with is labels, fields and tables
-	 * and has three methods related to the buttons that are supposed to exist,
+	 * and invokes three methods related to the buttons that are supposed to exist,
 	 * each one with different functions
 	 */
 	public void operationsOfManualConfiguration() {
@@ -81,6 +86,7 @@ public class ManualConfiguration {
 	 * This operation constructs and operates on a button that causes the file 
 	 * uploaded by the user on the supposed field to be read
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
+	 * @param model The data model for the table
 	 */
 	private void constructAndOperateOnButtonReadRules(JTable table, DefaultTableModel model) {
 		JButton buttonReadRules = new JButton("Obter regras");
@@ -97,8 +103,7 @@ public class ManualConfiguration {
 				
 				for (int i = 0; i < rules.size(); i++) {
 					table.setValueAt(rules.get(i).getName(), i, 0);
-					double d = 0.0;
-					table.setValueAt(d, i, 1);
+					table.setValueAt(0.0, i, 1);
 				}
 				
 			    System.out.println("Regras lidas com sucesso");
@@ -110,7 +115,7 @@ public class ManualConfiguration {
 	
 	/**
 	 * This operation causes the files uploaded by the user on the supposed fields 
-	 * (fieldSPam and fieldHam) to be read and has two methods to work with the messages
+	 * (fieldSPam and fieldHam) to be read and invokes two methods to work with the messages
 	 * on those files and to calculate the amount of False Negatives and False Positives
 	 * on that files
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
@@ -134,39 +139,7 @@ public class ManualConfiguration {
 		centralPanel.add(buttonEvaluateConfiguration);
 	}
 
-	/**
-	 * This operation causes the file uploaded by the user on the supposed field to be read
-	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
-	 */
-	private void constructAndOperateOnButtonSaveConfiguration(JTable table) {
-		JButton buttonSaveConfiguration = new JButton("Gravar Configuração");
-		buttonSaveConfiguration.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveConfiguration(table);	
-			}
-		});
 	
-		centralPanel.add(buttonSaveConfiguration);
-	}
-	
-	public void saveConfiguration (JTable table) {
-		try {
-		    BufferedWriter buffWrite = new BufferedWriter(new FileWriter(fieldRules.getText()));
-		   
-		    for (int i = 0; i < rules.size(); i++) {
-		        buffWrite.append(rules.get(i).getName() + " ");
-				double d = Double.valueOf(table.getValueAt(i,1).toString());
-				buffWrite.append(d + "\n");
-			}
-		    
-		    buffWrite.close();
-		    System.out.println("Configuração gravada com sucesso");
-		    
-		 } catch(IOException e1) {
-			 e1.printStackTrace();
-		 }   	
-	}
-
 	/**
 	 * This operation reads the rules of the messages of the file Spam.log, sums the 
 	 * weights of each one of these rules and if this sum is less than 5, increases the
@@ -183,7 +156,7 @@ public class ManualConfiguration {
 		spamMessages = spamMessagesReader.getMessages();
 		
 		double sumRulesWeight = 0;
-		int numberOfFN = 0;
+		double numberOfFN = 0;
 		for (int i = 0; i < spamMessages.size(); i++) {
 			LinkedList<Rule> messageRules = spamMessages.get(i).getRules();
 			sumRulesWeight = 0;
@@ -193,7 +166,6 @@ public class ManualConfiguration {
 				for (int k = 0; k < rules.size(); k++) {
 					if(rules.get(k).getName().equals(s)) {
 						double d = Double.valueOf(table.getValueAt(k,1).toString());
-						System.out.println();
 						sumRulesWeight = sumRulesWeight + d;
 					}
 				}
@@ -210,7 +182,7 @@ public class ManualConfiguration {
 	 * weights of each one of these rules and if this sum is bigger than 5, increases the
 	 * value of the variable numberOfFP and shows that value on the field fieldFP
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
-	 * @param fieldFP The field that must be filled with the amount of False Positives in the file Spam.log
+	 * @param fieldFP The field that must be filled with the amount of False Positives in the file Ham.log
 	 */
 	public void calculationOfFPManual(JTable table, JTextField fieldFP) {
 		String pathHam = fieldHam.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\ham.log
@@ -221,7 +193,7 @@ public class ManualConfiguration {
 		hamMessages = hamMessagesReader.getMessages();
 		
 		double sumRulesWeight = 0;
-		int numberOfFP = 0;
+		double numberOfFP = 0;
 		for (int i = 0; i < hamMessages.size(); i++) {
 			LinkedList<Rule> messageRules = hamMessages.get(i).getRules();
 			sumRulesWeight = 0;
@@ -240,5 +212,43 @@ public class ManualConfiguration {
 			}
 		}
 		fieldFP.setText("" + numberOfFP);
+	}
+	
+	/**
+	 * This operation constructs a button and invokes a method that specifies the functions of that button
+	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
+	 */
+	private void constructAndOperateOnButtonSaveConfiguration(JTable table) {
+		JButton buttonSaveConfiguration = new JButton("Gravar Configuração");
+		buttonSaveConfiguration.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveConfiguration(table);	
+			}
+		});
+	
+		centralPanel.add(buttonSaveConfiguration);
+	}
+	
+	
+	/**
+	 * This operation reads the weights from the interface and updates the file rules.cf
+	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
+	 */
+	public void saveConfiguration (JTable table) {
+		try {
+		    BufferedWriter buffWrite = new BufferedWriter(new FileWriter(fieldRules.getText()));
+		   
+		    for (int i = 0; i < rules.size(); i++) {
+		        buffWrite.append(rules.get(i).getName() + " ");
+				double d = Double.valueOf(table.getValueAt(i,1).toString());
+				buffWrite.append(d + "\n");
+			}
+		    
+		    buffWrite.close();
+		    System.out.println("Configuração gravada com sucesso");
+		    
+		} catch(IOException e1) {
+			e1.printStackTrace();
+		}   	
 	}
 }

@@ -10,11 +10,10 @@ import javax.swing.WindowConstants;
 
 /**
  * @author gspas1-iscteiul
- *
  */
 public class AntiSpamFilterConfiguration {
 
-	//falta meter javadocs aqui
+	//falta meter javadocs aqui?
 	private JFrame frame;
 	private JPanel globalPanel;
 	private JPanel topPanel;
@@ -23,7 +22,7 @@ public class AntiSpamFilterConfiguration {
 	private JTextField fieldSpam ;
 	private JTextField fieldHam;
 
-	
+	//falta meter javadocs aqui?
 	public AntiSpamFilterConfiguration() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -34,6 +33,9 @@ public class AntiSpamFilterConfiguration {
 	}
 
 
+	/**
+	 * This operation constructs the global panel with is labels and fields
+	 */
 	private void addFrameContent() {
 		globalPanel = new JPanel();
 		globalPanel.setLayout(new BorderLayout());
@@ -42,6 +44,7 @@ public class AntiSpamFilterConfiguration {
 		constructTopPanel();
 		constructAndOperateOnCentralPanel();
 	}
+	
 	
 	/**
 	 * This operation constructs the top panel with is labels and fields
@@ -77,6 +80,7 @@ public class AntiSpamFilterConfiguration {
 		topPanel.add(labelHam);
 	}
 	
+	
 	/**
 	 * This operation initializes the central panel
 	 * and has two methods to construct and operate on that central panel
@@ -95,12 +99,17 @@ public class AntiSpamFilterConfiguration {
 	}
 
 	
+	/**
+	 * This operation puts the frame visible and with a specific size
+	 */
 	private void open() {
 		frame.setVisible(true);
 		frame.setSize(700,980);
 	}
 	
+	
 	/**
+	 * Main method of the application responsible for executing it
 	 * @param args
 	 */
 	public static void main(String[] args) {

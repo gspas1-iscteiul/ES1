@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 /**
  * @author gspas1-iscteiul
- *
  */
 public class Message {
 
