@@ -8,14 +8,15 @@ public class Rule {
 	private String name;
 
 	public Rule(String name) {
-		this.setName(name);
+		this.name = name;
 	}
 
+	
+	/**
+	 * Method to return the id of the rule
+	 * @return String - Id of the rule
+	 */
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 }

@@ -11,23 +11,25 @@ public class Message {
 	private LinkedList<Rule> rules;
 
 	public Message(String id, LinkedList<Rule> rules) {
-		this.setID(id);
-		this.setRules(rules);
+		this.id = id;
+		this.rules = rules;
 	}
 
+	
+	/**
+	 * Method to return the id of the message
+	 * @return String - Id of the message
+	 */
 	public String getID() {
 		return id;
 	}
 
-	public void setID(String id) {
-		this.id = id;
-	}
-
+	
+	/**
+	 * Method to return the rules of the message
+	 * @return LinkedList - Rules of the message
+	 */
 	public LinkedList<Rule> getRules() {
 		return rules;
-	}
-
-	public void setRules(LinkedList<Rule> rules) {
-		this.rules = rules;
 	}
 }

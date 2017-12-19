@@ -12,6 +12,10 @@ public class MessagesAndRulesReader {
 
 	private LinkedList<Message> messages = new LinkedList<Message>();
 
+	/**
+	 * This operation reads the file with the name 'name' in a specific way
+	 * @param name The name of the file to be read 
+	 */
 	public void readFileSpamAndHam(String name) {
 		try {
 			Scanner scanner = new Scanner (new File(name));
@@ -38,6 +42,11 @@ public class MessagesAndRulesReader {
 		}
 	}
 	
+	
+	/**
+	 * Method to return the messages of the file
+	 * @return LinkedList - Messages of the file
+	 */
 	public LinkedList<Message> getMessages() {
 		return messages;
 	}

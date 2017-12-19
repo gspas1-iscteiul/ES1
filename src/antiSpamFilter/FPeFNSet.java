@@ -9,23 +9,25 @@ public class FPeFNSet {
 	private double FP;
 
 	public FPeFNSet(double FN, double FP) {
-		setFN(FN);
-		setFP(FP);
+		this.FN = FN;
+		this.FP = FP;
 	}
 
+	
+	/**
+	 * Method to return the number of False Negatives
+	 * @return Double - Number of False Negatives
+	 */
 	public double getFN() {
 		return FN;
 	}
 
-	public void setFN(double FN) {
-		this.FN = FN;
-	}
-
+	
+	/**
+	 * Method to return the number of False Positives
+	 * @return Double - Number of False Positives
+	 */
 	public double getFP() {
 		return FP;
-	}
-
-	public void setFP(double FP) {
-		this.FP = FP;
 	}
 }

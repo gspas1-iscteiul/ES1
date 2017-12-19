@@ -12,6 +12,10 @@ public class RulesReader {
 
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 
+	/**
+	 * This operation reads the file with the name 'name' in a specific way
+	 * @param name The name of the file to be read 
+	 */
 	public void readFileRules(String name) {
 		try {
 			Scanner scanner = new Scanner (new File(name));
@@ -29,6 +33,11 @@ public class RulesReader {
 		}
 	}
 	
+	
+	/**
+	 * Method to return the rules of a file
+	 * @return LinkedList - Rules of a file
+	 */
 	public LinkedList<Rule> getRules() {
 		return rules;
 	}
