@@ -1,0 +1,27 @@
+Resultado das reuniões de Sprint Retrospective:
+
+-> Sprint1 (Afinação Manual) Retrospective
+   1. Coisas a funcionar mal na equipa – Um dos developers não mostrou interesse em ajudar a
+      produzir código da Afinação Manual, acabando, portanto, por não haver uma correta 
+      divisão das tarefas a desenvolver em termos de programação. Este developer ficou, 
+      portanto, de mudar o seu comportamento no Sprint seguinte.
+      
+   2. Coisas a funcionar mal na equipa – O Scrum Master deveria ter sido o elemento mais ativo
+      na gestão da plataforma Trello, algo que não aconteceu, ficando, portanto, de mudar o
+      seu comportamento no Sprint seguinte.
+
+   
+-> Sprint2 (Afinação Automática) Retrospective
+   1. Coisas a funcionar mal na equipa – Um dos developers voltou a não mostrar interesse em 
+      ajudar a produzir código da Afinação Automática, não alterando, portanto, o seu 
+      comportamento face ao sprint anterior.
+      
+   2. Coisas a funcionar mal na equipa – O Scrum Master deveria ter sido o elemento mais ativo
+      na gestão da plataforma Trello, algo que não voltou a acontecer.
+      
+   2. Chegou-se à conclusão de que se cometeu um ligeiro erro no projeto no que diz respeito
+      ao seguimento do método ágil adotado (Scrum). Os testes deveriam ter sido realizados
+      à medida que o sistema ia sendo implementado e não apenas no final (como ocorreu).
+      Optámos então por não criar um novo Sprint3, uma vez que este apenas iria conter os
+      testes.
+      
