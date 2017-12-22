@@ -8,6 +8,12 @@ public class FPeFNSet {
 	private double FN;
 	private double FP;
 
+	
+	/**
+	 * This constructor receives the number of False Negatives and the number of False Positives
+	 * @param FN The number of False Negatives
+	 * @param FP The number of False Positives
+	 */
 	public FPeFNSet(double FN, double FP) {
 		this.FN = FN;
 		this.FP = FP;

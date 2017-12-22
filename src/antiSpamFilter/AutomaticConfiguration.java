@@ -23,7 +23,13 @@ public class AutomaticConfiguration {
 	private RulesReader ruleReader = new RulesReader();
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 
-	//falta meter javadocs aqui
+
+	/**
+	 * This constructor shows that some objects created in this class are equal to
+	 * other objects of the class where an instance of this class was created
+	 * @param centralPanel The panel with the information related to both Manual and Automatic Configuration 
+	 * @param manualConfiguration An instance of the class ManualConfiguration
+	 */
 	public AutomaticConfiguration(JPanel centralPanel, ManualConfiguration manualConfiguration) {
 		this.centralPanel = centralPanel;
 		this.manualConfiguration = manualConfiguration;
@@ -32,7 +38,7 @@ public class AutomaticConfiguration {
 	
 	/**
 	 * This operation constructs the part of the central panel related 
-	 * to the Automatic configuration with is labels, fields, tables and buttons
+	 * to the Automatic configuration with its labels, fields, tables and buttons
 	 */
 	public void operationsOfAutomaticConfiguration() {
 		JLabel labelSpace1 = new JLabel("");
@@ -116,8 +122,8 @@ public class AutomaticConfiguration {
 	 * that information on the interface
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
 	 * @param model The data model for the table
-	 * @param fieldFPAuto The field that must be filled with the amount of False Positives in the file Ham.log
-	 * @param fieldFNAuto The field that must be filled with the amount of False Negatives in the file Spam.log
+	 * @param fieldFPAuto The field that must be filled with the amount of False Positives in the file 'ham.log'
+	 * @param fieldFNAuto The field that must be filled with the amount of False Negatives in the file 'spam.log'
 	 */
 	private void constructAndOperateOnButtonGenerateAutomaticConfiguration(JTable table, DefaultTableModel model, JTextField fieldFPAuto, JTextField fieldFNAuto) {
 		JButton buttonGenerateAutomaticConfiguration = new JButton("Gerar Configuração Automática Ótima");
@@ -190,5 +196,22 @@ public class AutomaticConfiguration {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+
+	/**
+	 * Method to return the reader of the file 'rules.cf'
+	 * @return RulesReader - The reader of the file 'rules.cf'
+	 */
+	public RulesReader getRuleReader() {
+		return ruleReader;
+	}
+
+	/**
+	 * Method to return the list of rules of the file 'rules.cf'
+	 * @return LinkedList - The list of rules of the file 'rules.cf'
+	 */
+	public LinkedList<Rule> getRules() {
+		return rules;
 	}
 }

@@ -33,7 +33,14 @@ public class ManualConfiguration {
 	private JTextField fieldFN;
 	
 
-	//falta meter javadocs aqui
+	/**
+	 * This constructor shows that some objects created in this class are equal to
+	 * other objects of the class where an instance of this class was created
+	 * @param centralPanel The panel with the information related to both Manual and Automatic Configuration 
+	 * @param fieldRules The field with the path to the file 'rules.cf'
+	 * @param fieldSpam The field with the path to the file 'spam.log'
+	 * @param fieldHam The field with the path to the file 'ham.log'
+	 */
 	public ManualConfiguration(JPanel centralPanel, JTextField fieldRules, JTextField fieldSpam, JTextField fieldHam) {
 		this.centralPanel = centralPanel;
 		this.fieldRules = fieldRules;
@@ -41,9 +48,10 @@ public class ManualConfiguration {
 		this.fieldHam = fieldHam;
 	}
 	
+	
 	/**
 	 * This operation constructs the part of the central panel 
-	 * related to the Manual Configuration with is labels, fields and tables
+	 * related to the Manual Configuration with its labels, fields and tables
 	 * and invokes three methods related to the buttons that are supposed to exist,
 	 * each one with different functions
 	 */
@@ -91,6 +99,7 @@ public class ManualConfiguration {
 		constructAndOperateOnButtonSaveConfiguration(table);
 	}
 
+	
 	/**
 	 * This operation constructs and operates on a button that causes the file 
 	 * uploaded by the user on the supposed field to be read
@@ -154,8 +163,8 @@ public class ManualConfiguration {
 	/**
 	 * This operation reads the rules of the messages of the file Spam.log, sums the 
 	 * weights of each one of these rules and if this sum is less than 5, increases the
-	 * value of the variable numberOfFN and shows that value on the field fieldFN
-	 * @param  The table that must be filled with the rules that have been read from the file and with the weight for each rule
+	 * value of the variable numberOfFN
+	 * @param weights The array with the weights from the interface
 	 */
 	public double calculationOfFNManual(double[] weights) {
 		String pathSpam = fieldSpam.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\spam.log
@@ -187,12 +196,12 @@ public class ManualConfiguration {
 		return numberOfFN;
 	}
 	
+	
 	/**
 	 * This operation reads the rules of the messages of the file Ham.log, sums the 
 	 * weights of each one of these rules and if this sum is bigger than 5, increases the
-	 * value of the variable numberOfFP and shows that value on the field fieldFP
-	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
-	 * @param fieldFP The field that must be filled with the amount of False Positives in the file Ham.log
+	 * value of the variable numberOfFP
+	 * @param weights The array with the weights from the interface
 	 */
 	public double calculationOfFPManual(double[] weights) {
 		String pathHam = fieldHam.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\ham.log
@@ -223,6 +232,7 @@ public class ManualConfiguration {
 		}
 		return numberOfFP;
 	}
+	
 	
 	/**
 	 * This operation constructs a button and invokes a method that specifies the functions of that button
@@ -259,5 +269,70 @@ public class ManualConfiguration {
 		} catch(IOException e1) {
 			e1.printStackTrace();
 		}   	
+	}
+	
+
+	/**
+	 * Method to return the reader of the file 'rules.cf'
+	 * @return RulesReader - The reader of the file 'rules.cf'
+	 */
+	public RulesReader getRuleReader() {
+		return ruleReader;
+	}
+
+	/**
+	 * Method to return the reader of the file 'spam.log'
+	 * @return MessagesAndRulesReader - The reader of the file 'spam.log'
+	 */
+	public MessagesAndRulesReader getSpamMessagesReader() {
+		return spamMessagesReader;
+	}
+
+	/**
+	 * Method to return the reader of the file 'ham.log'
+	 * @return MessagesAndRulesReader - The reader of the file 'ham.log'
+	 */
+	public MessagesAndRulesReader getHamMessagesReader() {
+		return hamMessagesReader;
+	}
+
+	/**
+	 * Method to return the field with the path to the file 'rules.cf'
+	 * @return JTextField - The field with the path to the file 'rules.cf'
+	 */
+	public JTextField getFieldRules() {
+		return fieldRules;
+	}
+
+	/**
+	 * Method to return the field with the path to the file 'spam.log'
+	 * @return JTextField - The field with the path to the file 'spam.log'
+	 */
+	public JTextField getFieldSpam() {
+		return fieldSpam;
+	}
+
+	/**
+	 * Method to return the field with the path to the file 'ham.log'
+	 * @return JTextField - The field with the path to the file 'ham.log'
+	 */
+	public JTextField getFieldHam() {
+		return fieldHam;
+	}
+
+	/**
+	 * Method to return the field that must be filled with the amount of False Positives in the file 'ham.log'
+	 * @return JTextField - The field that must be filled with the amount of False Positives in the file 'ham.log'
+	 */
+	public JTextField getFieldFP() {
+		return fieldFP;
+	}
+
+	/**
+	 * Method to return the field that must be filled with the amount of False Negatives in the file 'spam.log'
+	 * @return JTextField - The field that must be filled with the amount of False Negatives in the file 'spam.log'
+	 */
+	public JTextField getFieldFN() {
+		return fieldFN;
 	}
 }

@@ -13,7 +13,7 @@ public class RulesReader {
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 
 	/**
-	 * This operation reads the file with the name 'name' in a specific way
+	 * This operation reads the file with the given name in a specific way
 	 * @param name The name of the file to be read 
 	 */
 	public void readFileRules(String name) {

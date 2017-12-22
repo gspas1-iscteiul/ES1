@@ -13,7 +13,7 @@ public class MessagesAndRulesReader {
 	private LinkedList<Message> messages = new LinkedList<Message>();
 
 	/**
-	 * This operation reads the file with the name 'name' in a specific way
+	 * This operation reads the file with the given name in a specific way
 	 * @param name The name of the file to be read 
 	 */
 	public void readFileSpamAndHam(String name) {

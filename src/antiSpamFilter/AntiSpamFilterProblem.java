@@ -9,7 +9,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 /**
  * @author adrianolopes ou vitorbastofernandes1
  * 
- * Changes made by gGuilherme Pereira
+ * Changes made by Guilherme Pereira
  * 
  */
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {

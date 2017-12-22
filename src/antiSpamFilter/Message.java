@@ -10,6 +10,11 @@ public class Message {
 	private String id;
 	private LinkedList<Rule> rules;
 
+	/**
+	 * This constructor specifies the id and the rules of a message
+	 * @param id The id of the message
+	 * @param rules The rules of the message
+	 */
 	public Message(String id, LinkedList<Rule> rules) {
 		this.id = id;
 		this.rules = rules;

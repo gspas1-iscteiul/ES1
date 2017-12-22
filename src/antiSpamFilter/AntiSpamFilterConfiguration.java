@@ -21,11 +21,13 @@ public class AntiSpamFilterConfiguration {
 	private JTextField fieldSpam ;
 	private JTextField fieldHam;
 
-	//falta meter javadocs aqui
+
+	/**
+	 * This constructor creates a frame and calls a method that operates on it
+	 */
 	public AntiSpamFilterConfiguration() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
 		frame.setTitle("Filtro Anti-Spam");
 		
 		addFrameContent();
@@ -33,7 +35,8 @@ public class AntiSpamFilterConfiguration {
 
 
 	/**
-	 * This operation constructs the global panel with is labels and fields
+	 * This operation constructs the global panel and has two methods 
+	 * to construct and operate on the top and central panels
 	 */
 	private void addFrameContent() {
 		globalPanel = new JPanel();
@@ -46,7 +49,7 @@ public class AntiSpamFilterConfiguration {
 	
 	
 	/**
-	 * This operation constructs the top panel with is labels and fields
+	 * This operation constructs the top panel with its labels and fields
 	 */
 	private void constructTopPanel() {
 		topPanel = new JPanel();
@@ -99,7 +102,7 @@ public class AntiSpamFilterConfiguration {
 
 	
 	/**
-	 * This operation puts the frame visible and with a specific size
+	 * This operation makes the frame visible and with a specific size
 	 */
 	private void open() {
 		frame.setVisible(true);
@@ -117,26 +120,50 @@ public class AntiSpamFilterConfiguration {
 	}
 	
 	
+	/**
+	 * Method to return the frame
+	 * @return JFrame - The frame
+	 */
 	public JFrame getFrame() {
 		return frame;
 	}
 
+	/**
+	 * Method to return the global panel
+	 * @return JPanel - The global panel
+	 */
 	public JPanel getGlobalPanel() {
 		return globalPanel;
 	}
 
+	/**
+	 * Method to return the top panel
+	 * @return JPanel - The top panel
+	 */
 	public JPanel getTopPanel() {
 		return topPanel;
 	}
 
+	/**
+	 * Method to return the field with the path to the file 'rules.cf'
+	 * @return JTextField - The field with the path to the file 'rules.cf'
+	 */
 	public JTextField getFieldRules() {
 		return fieldRules;
 	}
 
+	/**
+	 * Method to return the field with the path to the file 'spam.log'
+	 * @return JTextField - The field with the path to the file 'spam.log'
+	 */
 	public JTextField getFieldSpam() {
 		return fieldSpam;
 	}
 
+	/**
+	 * Method to return the field with the path to the file 'ham.log'
+	 * @return JTextField - The field with the path to the file 'ham.log'
+	 */
 	public JTextField getFieldHam() {
 		return fieldHam;
 	}
