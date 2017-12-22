@@ -2,6 +2,7 @@ package antiSpamFilter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import javax.swing.JButton;
@@ -13,17 +14,16 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * @author gspas1-iscteiul
+ * @author Guilherme Pereira
  */
 public class AutomaticConfiguration {
 	
-	//falta meter javadocs aqui?
 	private ManualConfiguration manualConfiguration;
 	private JPanel centralPanel;
 	private RulesReader ruleReader = new RulesReader();
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 
-	//falta meter javadocs aqui?
+	//falta meter javadocs aqui
 	public AutomaticConfiguration(JPanel centralPanel, ManualConfiguration manualConfiguration) {
 		this.centralPanel = centralPanel;
 		this.manualConfiguration = manualConfiguration;
@@ -82,9 +82,18 @@ public class AutomaticConfiguration {
 	
 		JButton buttonCalculateNewFPeFN = new JButton("Calcular novos FP e FN após alterações nos pesos");
 		buttonCalculateNewFPeFN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				manualConfiguration.calculationOfFNManual(table, fieldFNAuto);
-				manualConfiguration.calculationOfFPManual(table, fieldFPAuto);
+			public void actionPerformed(ActionEvent e) {			
+				double[] weights = new double[rules.size()];
+				for (int i = 0; i < rules.size(); i++) {
+					double d = Double.valueOf(table.getValueAt(i,1).toString());
+					weights[i] = d;
+				}
+				
+				double numberOfFN = manualConfiguration.calculationOfFNManual(weights);
+				fieldFNAuto.setText("" + numberOfFN);
+				
+				double numberOfFP = manualConfiguration.calculationOfFPManual(weights);
+				fieldFPAuto.setText("" + numberOfFP);
 			}
 		});
 		
@@ -168,5 +177,18 @@ public class AutomaticConfiguration {
 		});
 						
 		centralPanel.add(buttonGenerateAutomaticConfiguration);
+		
+		//gerar HV.Boxplot.eps
+		String[] params = new String[2];
+		String[] envp = new String[1];
+		params[0] = "C:\\Program Files\\R\\R-3.4.3\\bin\\x64\\Rscript.exe";
+		params[1] = "C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
+	
+		envp[0] = "Path=C:\\Program Files\\R\\R-3.4.3\\bin\\x64"; //confirmar
+		try {
+			Process p = Runtime.getRuntime().exec(params,envp,new File("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\experimentBaseDirectory\\AntiSpamStudy\\R"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 }

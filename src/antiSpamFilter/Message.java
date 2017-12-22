@@ -3,7 +3,7 @@ package antiSpamFilter;
 import java.util.LinkedList;
 
 /**
- * @author gspas1-iscteiul
+ * @author Guilherme Pereira
  */
 public class Message {
 

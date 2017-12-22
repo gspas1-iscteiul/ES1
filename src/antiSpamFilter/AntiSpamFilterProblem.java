@@ -9,7 +9,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 /**
  * @author adrianolopes ou vitorbastofernandes1
  * 
- * Changes made by gspas1-iscteiul
+ * Changes made by gGuilherme Pereira
  * 
  */
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
@@ -64,7 +64,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    }
 	    		
 		//cálculo FN
-		double sumRulesWeight = 0;
+		double sumRulesWeight = 0.0;
 	    falsosPositivosEFalsosNegativos[0] = 0.0;
 	    
 		for (int i = 0; i < spamMessages.size(); i++) {
@@ -87,7 +87,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		solution.setObjective(0, falsosPositivosEFalsosNegativos[0]);
 	    
 	    //cálculo FP
-		double sumRulesWeight1 = 0;
+		double sumRulesWeight1 = 0.0;
 	    falsosPositivosEFalsosNegativos[1] = 0.0;
 	    
 		for (int i = 0; i < hamMessages.size(); i++) {

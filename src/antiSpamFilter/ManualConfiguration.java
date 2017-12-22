@@ -15,11 +15,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * @author gspas1-iscteiul
+ * @author Guilherme Pereira
  */
 public class ManualConfiguration {
 	
-	//falta meter javadocs aqui?
 	private JPanel centralPanel;
 	private RulesReader ruleReader;
 	private MessagesAndRulesReader spamMessagesReader;
@@ -30,8 +29,11 @@ public class ManualConfiguration {
 	private JTextField fieldRules;
 	private JTextField fieldSpam ;
 	private JTextField fieldHam;
+	private JTextField fieldFP;
+	private JTextField fieldFN;
+	
 
-	//falta meter javadocs aqui?
+	//falta meter javadocs aqui
 	public ManualConfiguration(JPanel centralPanel, JTextField fieldRules, JTextField fieldSpam, JTextField fieldHam) {
 		this.centralPanel = centralPanel;
 		this.fieldRules = fieldRules;
@@ -64,8 +66,8 @@ public class ManualConfiguration {
 		JLabel labelSpace2 = new JLabel("");
 		JLabel labelFP = new JLabel(" FP:");
 		JLabel labelFN = new JLabel(" FN:");
-		JTextField fieldFP = new JTextField();
-		JTextField fieldFN = new JTextField();
+		fieldFP = new JTextField();
+		fieldFN = new JTextField();
 		JLabel labelSpace3 = new JLabel("");
 		JLabel labelSpace4 = new JLabel("");
 		
@@ -77,8 +79,15 @@ public class ManualConfiguration {
 		centralPanel.add(labelSpace3);
 		centralPanel.add(labelSpace4);
 		
-		constructAndOperateOnButtonReadRules(table, model);
-		constructAndOperateOnButtonEvaluateConfiguration(table, fieldFN, fieldFP);
+		JButton buttonReadRules = new JButton("Obter regras");
+		buttonReadRules.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				constructAndOperateOnButtonReadRules(table, model);
+			}
+		});
+		centralPanel.add(buttonReadRules);
+				
+		constructAndOperateOnButtonEvaluateConfiguration(table);
 		constructAndOperateOnButtonSaveConfiguration(table);
 	}
 
@@ -88,30 +97,25 @@ public class ManualConfiguration {
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
 	 * @param model The data model for the table
 	 */
-	private void constructAndOperateOnButtonReadRules(JTable table, DefaultTableModel model) {
-		JButton buttonReadRules = new JButton("Obter regras");
-		buttonReadRules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String path = fieldRules.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\AntiSpamConfigurationForProfessionalMailbox\rules.cf
+	public int constructAndOperateOnButtonReadRules(JTable table, DefaultTableModel model) {
+		String path = fieldRules.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\AntiSpamConfigurationForProfessionalMailbox\rules.cf
 				
-				ruleReader = new RulesReader();
-				ruleReader.readFileRules(path);
+		ruleReader = new RulesReader();
+		ruleReader.readFileRules(path);
 			
-				rules = ruleReader.getRules();
+		rules = ruleReader.getRules();
 				
-				model.setNumRows(rules.size());
+		model.setNumRows(rules.size());
 				
-				for (int i = 0; i < rules.size(); i++) {
-					table.setValueAt(rules.get(i).getName(), i, 0);
-					table.setValueAt(0.0, i, 1);
-				}
-				
-			    System.out.println("Regras lidas com sucesso");
-			}
-		});
+		for (int i = 0; i < rules.size(); i++) {
+			table.setValueAt(rules.get(i).getName(), i, 0);
+			table.setValueAt(0.0, i, 1);
+		}
 		
-		centralPanel.add(buttonReadRules);
+		System.out.println("Regras lidas com sucesso");
+		return rules.size();
 	}
+
 	
 	/**
 	 * This operation causes the files uploaded by the user on the supposed fields 
@@ -119,19 +123,26 @@ public class ManualConfiguration {
 	 * on those files and to calculate the amount of False Negatives and False Positives
 	 * on that files
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
-	 * @param fieldFN The field that must be filled with the amount of False Negatives in the file Spam.log
-	 * @param fieldFP The field that must be filled with the amount of False Positives in the file Ham.log
 	 */	
-	private void constructAndOperateOnButtonEvaluateConfiguration(JTable table, JTextField fieldFN, JTextField fieldFP) {
+	private void constructAndOperateOnButtonEvaluateConfiguration(JTable table) {
 		JButton buttonEvaluateConfiguration = new JButton("Avaliar Configuração");
 		buttonEvaluateConfiguration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Obter pesos da interface
+				double[] weights = new double[rules.size()];
+				for (int i = 0; i < rules.size(); i++) {
+					double d = Double.valueOf(table.getValueAt(i,1).toString());
+					weights[i] = d;
+				}
+				
 				//spam.log
-				calculationOfFNManual(table, fieldFN);
+				double numberOfFN = calculationOfFNManual(weights);
+				fieldFN.setText("" + numberOfFN);
 			    System.out.println("Falsos Negativos calculados com sucesso");
 				
 				//ham.log
-				calculationOfFPManual(table, fieldFP);
+			    double numberOfFP = calculationOfFPManual(weights);
+				fieldFP.setText("" + numberOfFP);
 			    System.out.println("Falsos Positivos calculados com sucesso");
 			}
 		});	
@@ -144,10 +155,9 @@ public class ManualConfiguration {
 	 * This operation reads the rules of the messages of the file Spam.log, sums the 
 	 * weights of each one of these rules and if this sum is less than 5, increases the
 	 * value of the variable numberOfFN and shows that value on the field fieldFN
-	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
-	 * @param fieldFN The field that must be filled with the amount of False Negatives in the file Spam.log
+	 * @param  The table that must be filled with the rules that have been read from the file and with the weight for each rule
 	 */
-	public void calculationOfFNManual(JTable table, JTextField fieldFN) {
+	public double calculationOfFNManual(double[] weights) {
 		String pathSpam = fieldSpam.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\spam.log
 		
 		spamMessagesReader = new MessagesAndRulesReader();
@@ -155,8 +165,8 @@ public class ManualConfiguration {
 		
 		spamMessages = spamMessagesReader.getMessages();
 		
-		double sumRulesWeight = 0;
-		double numberOfFN = 0;
+		double sumRulesWeight = 0.0;
+		double numberOfFN = 0.0;
 		for (int i = 0; i < spamMessages.size(); i++) {
 			LinkedList<Rule> messageRules = spamMessages.get(i).getRules();
 			sumRulesWeight = 0;
@@ -165,7 +175,7 @@ public class ManualConfiguration {
 
 				for (int k = 0; k < rules.size(); k++) {
 					if(rules.get(k).getName().equals(s)) {
-						double d = Double.valueOf(table.getValueAt(k,1).toString());
+						double d = weights[k];
 						sumRulesWeight = sumRulesWeight + d;
 					}
 				}
@@ -174,7 +184,7 @@ public class ManualConfiguration {
 				numberOfFN = numberOfFN + 1;
 			}
 		}
-		fieldFN.setText("" + numberOfFN);
+		return numberOfFN;
 	}
 	
 	/**
@@ -184,7 +194,7 @@ public class ManualConfiguration {
 	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
 	 * @param fieldFP The field that must be filled with the amount of False Positives in the file Ham.log
 	 */
-	public void calculationOfFPManual(JTable table, JTextField fieldFP) {
+	public double calculationOfFPManual(double[] weights) {
 		String pathHam = fieldHam.getText(); //Caminho é C:\Users\Guilherme Pereira\git\ES1-2017-IC1-67\ham.log
 		
 		hamMessagesReader = new MessagesAndRulesReader();
@@ -192,8 +202,8 @@ public class ManualConfiguration {
 		
 		hamMessages = hamMessagesReader.getMessages();
 		
-		double sumRulesWeight = 0;
-		double numberOfFP = 0;
+		double sumRulesWeight = 0.0;
+		double numberOfFP = 0.0;
 		for (int i = 0; i < hamMessages.size(); i++) {
 			LinkedList<Rule> messageRules = hamMessages.get(i).getRules();
 			sumRulesWeight = 0;
@@ -202,7 +212,7 @@ public class ManualConfiguration {
 
 				for (int k = 0; k < rules.size(); k++) {
 					if(rules.get(k).getName().equals(s)) {
-						double d = Double.valueOf(table.getValueAt(k, 1).toString());
+						double d = weights[k];
 						sumRulesWeight = sumRulesWeight + d;
 					}
 				}
@@ -211,7 +221,7 @@ public class ManualConfiguration {
 				numberOfFP = numberOfFP + 1;
 			}
 		}
-		fieldFP.setText("" + numberOfFP);
+		return numberOfFP;
 	}
 	
 	/**
@@ -225,7 +235,6 @@ public class ManualConfiguration {
 				saveConfiguration(table);	
 			}
 		});
-	
 		centralPanel.add(buttonSaveConfiguration);
 	}
 	

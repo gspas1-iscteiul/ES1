@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
- * @author gspas1-iscteiul
+ * @author Guilherme Pereira
  */
 public class MessagesAndRulesReader {
 

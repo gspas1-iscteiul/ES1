@@ -9,11 +9,10 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 /**
- * @author gspas1-iscteiul
+ * @author Guilherme Pereira
  */
 public class AntiSpamFilterConfiguration {
 
-	//falta meter javadocs aqui?
 	private JFrame frame;
 	private JPanel globalPanel;
 	private JPanel topPanel;
@@ -22,7 +21,7 @@ public class AntiSpamFilterConfiguration {
 	private JTextField fieldSpam ;
 	private JTextField fieldHam;
 
-	//falta meter javadocs aqui?
+	//falta meter javadocs aqui
 	public AntiSpamFilterConfiguration() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -115,5 +114,30 @@ public class AntiSpamFilterConfiguration {
 	public static void main(String[] args) {
 		AntiSpamFilterConfiguration a = new AntiSpamFilterConfiguration();
 		a.open();
+	}
+	
+	
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public JPanel getGlobalPanel() {
+		return globalPanel;
+	}
+
+	public JPanel getTopPanel() {
+		return topPanel;
+	}
+
+	public JTextField getFieldRules() {
+		return fieldRules;
+	}
+
+	public JTextField getFieldSpam() {
+		return fieldSpam;
+	}
+
+	public JTextField getFieldHam() {
+		return fieldHam;
 	}
 }
