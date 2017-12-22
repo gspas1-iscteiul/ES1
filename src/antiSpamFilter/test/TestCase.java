@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import antiSpamFilter.AntiSpamFilterConfiguration;
+import antiSpamFilter.AutomaticConfiguration;
 import antiSpamFilter.FPeFNAutomaticConfigurationReader;
 import antiSpamFilter.FPeFNSet;
 import antiSpamFilter.ManualConfiguration;
@@ -17,6 +18,11 @@ import antiSpamFilter.RulesReader;
 import antiSpamFilter.WeightsAutomaticConfigurationReader;
 import antiSpamFilter.WeightsSet;
 
+/**
+ * @author Guilherme Pereira
+ * 
+ * with the contribution of Ricardo Silva
+ */
 public class TestCase {
 
 	/**
@@ -49,7 +55,7 @@ public class TestCase {
 	
 	
 	/**
-	 * Test method for {@link antiSpamFilter.FPeFNSet#getFieldRules()/getFieldHam()/getFieldSpam()}.
+	 * Test method for {@link antiSpamFilter.AntiSpamFilterConfiguration#getFieldRules()/getFieldHam()/getFieldSpam()}.
 	 */	
 	@Test
 	public void testFields() {
@@ -78,6 +84,10 @@ public class TestCase {
 		int numberFP = (int) m.calculationOfFPManual(weights);
 		
 		assertTrue(numberFP==0);
+		
+		assertTrue(m.getFieldHam() == fieldHam);
+		assertTrue(m.getFieldSpam() == fieldSpam);
+		assertTrue(m.getFieldRules() == fieldRules);
 	}
 	
 	
@@ -99,6 +109,10 @@ public class TestCase {
 		int numberFN = (int) m.calculationOfFNManual(weights);
 		
 		assertTrue(numberFN==239);
+		
+		assertTrue(m.getFieldHam() == fieldHam);
+		assertTrue(m.getFieldSpam() == fieldSpam);
+		assertTrue(m.getFieldRules() == fieldRules);
 	}
 	
 	
@@ -121,6 +135,10 @@ public class TestCase {
 		
 		int size = m.constructAndOperateOnButtonReadRules(table, model);
 		assertTrue(size==335);
+		
+		assertTrue(m.getFieldHam() == fieldHam);
+		assertTrue(m.getFieldSpam() == fieldSpam);
+		assertTrue(m.getFieldRules() == fieldRules);
 	}
 	
 	
@@ -158,12 +176,33 @@ public class TestCase {
 	}
 	
 	/**
+	 * Test method for {@link antiSpamFilter.Message#getRules()}.
+	 */
+	@Test
+	public void testGetMessageRules() {
+		LinkedList<Rule> rules = new LinkedList<>();
+		Rule r = new Rule("rule1");
+		rules.add(r);
+		
+		Message m = new Message(null, rules);
+		assertNotNull(m.getRules());
+		
+		assertTrue(m.getRules().size() == 1);
+	}
+	
+	
+	/**
 	 * Test method for {@link antiSpamFilter.MessagesAndRulesReader#getMessages()}.
 	 */
 	@Test
 	public void testGetMessages() {
 		MessagesAndRulesReader r = new MessagesAndRulesReader();
-		assertNotNull(r.getMessages());
+		r.readFileSpamAndHam("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\spam.log");
+		assertTrue(r.getMessages().size() == 239);
+
+		MessagesAndRulesReader r1 = new MessagesAndRulesReader();
+		r1.readFileSpamAndHam("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\ham.log");
+		assertTrue(r1.getMessages().size() == 695);
 	}
 	
 	
@@ -209,5 +248,45 @@ public class TestCase {
 		WeightsSet w = new WeightsSet(weights);
 		assertTrue(w.getWeights().size() == 1);
 	}
+	
+	
+	/**
+	 * Test method for {@link antiSpamFilter.AutomaticConfiguration#getRuleReader()}.
+	 */
+	@Test
+	public void testGetRuleReader() {
+		AutomaticConfiguration a = new AutomaticConfiguration(null, null);
+		assertNotNull(a.getRuleReader());
+	}
+	
+	
+	/**
+	 * Test method for {@link antiSpamFilter.AutomaticConfiguration#getRules()}.
+	 */
+	@Test
+	public void testGetRulesAuto() {
+		AutomaticConfiguration a = new AutomaticConfiguration(null, null);
+		assertNotNull(a.getRules());
+	}
+	
+	
+	/**
+	 * Test method for {@link antiSpamFilter.ManualConfiguration#getFieldSpam()/getFieldHam()/getFieldRules()}.
+	 */
+	@Test
+	public void testGetFields() {
+		JTextField fieldRules = new JTextField("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\AntiSpamConfigurationForProfessionalMailbox\\rules.cf");
+		JTextField fieldSpam = new JTextField("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\spam.log");
+		JTextField fieldHam = new JTextField("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\ham.log");
 
+		ManualConfiguration m = new ManualConfiguration(null, fieldRules, fieldSpam, fieldHam);
+
+		assertNotNull(m.getFieldSpam());
+		assertNotNull(m.getFieldHam());
+		assertNotNull(m.getFieldRules());
+		
+		assertTrue(m.getFieldSpam() == fieldSpam);
+		assertTrue(m.getFieldHam() == fieldHam);
+		assertTrue(m.getFieldRules() == fieldRules);
+	}
 }
