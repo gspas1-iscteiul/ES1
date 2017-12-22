@@ -85,25 +85,7 @@ public class AutomaticConfiguration {
 		model.setNumRows(rules.size());
 		
 		constructAndOperateOnButtonGenerateAutomaticConfiguration(table, model, fieldFPAuto, fieldFNAuto);
-	
-		JButton buttonCalculateNewFPeFN = new JButton("Calcular novos FP e FN após alterações nos pesos");
-		buttonCalculateNewFPeFN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {			
-				double[] weights = new double[rules.size()];
-				for (int i = 0; i < rules.size(); i++) {
-					double d = Double.valueOf(table.getValueAt(i,1).toString());
-					weights[i] = d;
-				}
-				
-				double numberOfFN = manualConfiguration.calculationOfFNManual(weights);
-				fieldFNAuto.setText("" + numberOfFN);
-				
-				double numberOfFP = manualConfiguration.calculationOfFPManual(weights);
-				fieldFPAuto.setText("" + numberOfFP);
-			}
-		});
-		
-		centralPanel.add(buttonCalculateNewFPeFN);
+		constructsAndOperateOnButtonCalculateNewFPeFN(table, fieldFPAuto, fieldFNAuto);
 		
 		JButton buttonSaveAutomaticConfiguration = new JButton("Gravar Configuração Automática");
 		buttonSaveAutomaticConfiguration.addActionListener(new ActionListener() {
@@ -169,7 +151,7 @@ public class AutomaticConfiguration {
 						for (int j = 0; j < weights.size(); j++) {
 							table.setValueAt(weights.get(j), j, 1);
 						}						
-					}					
+					}
 				}
 				
 				//Colocar FN e FP na interface
@@ -184,18 +166,53 @@ public class AutomaticConfiguration {
 						
 		centralPanel.add(buttonGenerateAutomaticConfiguration);
 		
-		//gerar HV.Boxplot.eps
+		generateBoxploteps();
+	}
+
+	/**
+	 * This operation generates the file HV.Boxplot.eps
+	 */
+	private void generateBoxploteps() {
 		String[] params = new String[2];
 		String[] envp = new String[1];
 		params[0] = "C:\\Program Files\\R\\R-3.4.3\\bin\\x64\\Rscript.exe";
 		params[1] = "C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
-	
+		
 		envp[0] = "Path=C:\\Program Files\\R\\R-3.4.3\\bin\\x64"; //confirmar
 		try {
 			Process p = Runtime.getRuntime().exec(params,envp,new File("C:\\Users\\Guilherme Pereira\\git\\ES1-2017-IC1-67\\experimentBaseDirectory\\AntiSpamStudy\\R"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	
+	/**
+	 * This operation constructs and operates on a button that calculates again the amount of FP
+	 * and FN after the changes made by the user
+	 * @param table The table that must be filled with the rules that have been read from the file and with the weight for each rule
+	 * @param fieldFPAuto The field that must be filled with the amount of False Positives in the file 'ham.log'
+	 * @param fieldFNAuto The field that must be filled with the amount of False Negatives in the file 'spam.log'
+	 */
+	private void constructsAndOperateOnButtonCalculateNewFPeFN(JTable table, JTextField fieldFPAuto, JTextField fieldFNAuto) {
+		JButton buttonCalculateNewFPeFN = new JButton("Calcular novos FP e FN após alterações nos pesos");
+		buttonCalculateNewFPeFN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {			
+				double[] weights = new double[rules.size()];
+				for (int i = 0; i < rules.size(); i++) {
+					double d = Double.valueOf(table.getValueAt(i,1).toString());
+					weights[i] = d;
+				}
+				
+				double numberOfFN = manualConfiguration.calculationOfFNManual(weights);
+				fieldFNAuto.setText("" + numberOfFN);
+				
+				double numberOfFP = manualConfiguration.calculationOfFPManual(weights);
+				fieldFPAuto.setText("" + numberOfFP);
+			}
+		});
+		
+		centralPanel.add(buttonCalculateNewFPeFN);
 	}
 
 
@@ -207,6 +224,7 @@ public class AutomaticConfiguration {
 		return ruleReader;
 	}
 
+	
 	/**
 	 * Method to return the list of rules of the file 'rules.cf'
 	 * @return LinkedList - The list of rules of the file 'rules.cf'
